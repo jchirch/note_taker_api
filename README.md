@@ -1,5 +1,8 @@
 # README
 
+## Description
+This is the API for a notetaker app to allow me to learn new technologies and document as I go.
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
