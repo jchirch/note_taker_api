@@ -8,7 +8,7 @@ RSpec.describe "API::V1::Subjects", type: :request do
 
   describe "GET /index" do
     it "returns all subjects" do
-      get "/subjects"
+      get "/api/v1/subjects"
 
       expect(response).to have_http_status(:success)
       json = JSON.parse(response.body)
@@ -19,7 +19,7 @@ RSpec.describe "API::V1::Subjects", type: :request do
 
   describe "GET /show" do
     it "returns a single subject" do
-      get "/subjects/#{@subject1.id}"
+      get "/api/v1/subjects/#{@subject1.id}"
 
       expect(response).to have_http_status(:success)
       json = JSON.parse(response.body)
@@ -33,7 +33,7 @@ RSpec.describe "API::V1::Subjects", type: :request do
       subject_params = { subject: { name: "Java" } }
 
       expect {
-        post "/subjects", params: subject_params
+        post "/api/v1/subjects", params: subject_params
       }.to change(Subject, :count).by(1)
 
       expect(response).to have_http_status(:created)
