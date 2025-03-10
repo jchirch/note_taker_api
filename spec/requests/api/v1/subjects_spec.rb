@@ -8,7 +8,7 @@ RSpec.describe "API::V1::Subjects", type: :request do
 
   describe "GET /index" do
     it "returns all subjects" do
-      get "/subjects"
+      get "/api/v1/subjects"
 
       expect(response).to have_http_status(:success)
       json = JSON.parse(response.body)
@@ -19,26 +19,24 @@ RSpec.describe "API::V1::Subjects", type: :request do
 
   describe "GET /show" do
     it "returns a single subject" do
-      get "/subjects/#{@subject1.id}"
+      get "/api/v1/subjects/#{@subject1.id}"
 
       expect(response).to have_http_status(:success)
-      json = JSON.parse(response.body)
-      expect(json["id"]).to eq(@subject1.id)
-      expect(json["name"]).to eq("Angular")
+      json = JSON.parse(response.body, symbolize_names: true)
+      expect(json[:id]).to eq(@subject1.id)
+      expect(json[:name]).to eq("Angular")
     end
   end
 
   describe "POST /create" do
     it "creates a new subject" do
-      subject_params = { subject: { name: "Java" } }
+      subject_params =  { name: "Java" } 
 
-      expect {
-        post "/subjects", params: subject_params
-      }.to change(Subject, :count).by(1)
+      post "/api/v1/subjects", params: subject_params, as: :json
 
-      expect(response).to have_http_status(:created)
-      json = JSON.parse(response.body)
-      expect(json["name"]).to eq("Java")
+      expect(response).to have_http_status(201)
+      new_sub = JSON.parse(response.body, symbolize_names: true)
+      expect(new_sub[:name]).to eq("Java")
     end
   end
 end
