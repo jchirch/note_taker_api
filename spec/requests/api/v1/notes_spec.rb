@@ -13,39 +13,39 @@ RSpec.describe "API::V1::Notes", type: :request do
 
   describe "GET /index" do
     it "returns all notes" do
-      get "/notes"
-
-    
+      get "/api/v1/notes"
+      expect(response).to have_http_status(:success)
+      json = JSON.parse(response.body)
+      expect(json.length).to eq(2)
+      expect(json.map { |note| note["title"]}).to include("Make a new Angular app", "Angular dev server")
+      expect(json.map { |note| note["content"]}).to include("run in CLI: ng new workspace-name-here", "run in CLI to boot dev server and open app in http://localhost:4200: ng serve --open")
     end
   end
 
   describe "GET /show" do
     it "returns a single subject" do
-      get "/notes/#{@note1.id}"
+      get "/api/v1/notes/#{@note1.id}"
 
       expect(response).to have_http_status(:success)
-      json = JSON.parse(response.body)
-      expect(json["id"]).to eq(@note1.id)
-      expect(json["title"]).to eq("Make a new Angular app")
-      expect(json["content"]).to eq("run in CLI: ng new workspace-name-here")
+      json = JSON.parse(response.body, symbolize_names: true)
+      expect(json[:id]).to eq(@note1.id)
+      expect(json[:title]).to eq("Make a new Angular app")
+      expect(json[:content]).to eq("run in CLI: ng new workspace-name-here")
     end
   end
 
   describe "POST /create" do
-    it "creates a new subject" do
-      # subject_params = { subject: { name: "Java" } }
-      subject_params = { name: "Java" }
-
+    it "creates a new note" do
+      note_params = { title: "Java Docs", content: "https://docs.oracle.com/en/java/" }
       
-      post "/api/v1/notes", params: subject_params, as: :json
-      
+      post "/api/v1/notes", params: note_params, as: :json
 
-      # expect(response).to have_http_status(:created)
+      expect(response).to have_http_status(201)
 
-      new_subject = JSON.parse(response.body)
-      puts 'new subject <><><><>'
-      puts new_subject
-      expect(json["name"]).to eq("Java")
+      new_note = JSON.parse(response.body, symbolize_names: true)
+
+      expect(new_note[:title]).to eq("Java Docs")
+      expect(new_note[:content]).to eq("https://docs.oracle.com/en/java/")
     end
   end
 end
