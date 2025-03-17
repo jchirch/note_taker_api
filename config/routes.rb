@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       resources :subjects, only: [:create, :index, :show, :update, :destroy]
       resources :notes, only: [:create, :index, :show, :update, :destroy]
       resources :subject_notes, only: [:create, :index, :show, :update, :destroy]
+      get 'notes/count', to: 'notes#count'
+      get 'subjects/count', to: 'subjects#count'
     end
   end
 end
