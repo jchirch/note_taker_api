@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe "API::V1::Subjects", type: :request do
   before(:each) do
-    @subject1 = Subject.create!(name: "Angular")
-    @subject2 = Subject.create!(name: "Golang")
+    @subject1 = FactoryBot.create(:subject, name: "Angular")
+    @subject2 = FactoryBot.create(:subject, name: "Golang")
   end
 
   describe "GET /index" do
@@ -37,6 +37,23 @@ RSpec.describe "API::V1::Subjects", type: :request do
       expect(response).to have_http_status(201)
       new_sub = JSON.parse(response.body, symbolize_names: true)
       expect(new_sub[:name]).to eq("Java")
+    end
+  end
+
+  describe "GET /count" do
+    it "counts all subjects in database" do
+      get "/api/v1/subjects/count"
+      expect(response).to have_http_status(:success)
+      initial_response = JSON.parse(response.body)
+
+      expect(initial_response).to eq({"count"=>2})
+
+      FactoryBot.create(:subject, name: "PERL")
+
+      get "/api/v1/subjects/count"
+      updated_response = JSON.parse(response.body)
+
+      expect(updated_response).to eq({"count"=>3})
     end
   end
 end

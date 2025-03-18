@@ -6,9 +6,13 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
   namespace :api do
     namespace :v1 do
+      get 'notes/count', to: 'notes#count'
+      get 'subjects/count', to: 'subjects#count'
+      
       resources :subjects, only: [:create, :index, :show, :update, :destroy]
       resources :notes, only: [:create, :index, :show, :update, :destroy]
       resources :subject_notes, only: [:create, :index, :show, :update, :destroy]
+     
     end
   end
 end

@@ -55,6 +55,19 @@ Body:
     "name": "Markdown"
 }
 ```
+
+**Count all Subjects**
+
+Endpoint: GET /api/v1/subjects/count
+
+Response: Returns an object: {count: #}
+
+**Count all Notes**
+
+Endpoint: GET /api/v1/notes/count
+
+Response: Returns an object: {count: #}
+
 ## Testing
 RSpec was used for all test suites.
 - For associations and validations run: `bundle exec rspec spec/models`
@@ -68,4 +81,5 @@ RSpec was used for all test suites.
   - rspec-mocks 3.13.2
   - rspec-rails 7.1.1
   - rspec-support 3.13.2
-
+* FactoryBot-Rails
+* ShouldaMatchers 6.0
