@@ -19,6 +19,11 @@ module Api
           render json: { errors: @subject.errors.full_messages }, status: :unprocessable_entity
         end
       end
+
+      def count
+        count = Subject.count
+        render json: {count: count}
+      end
     
       private
     

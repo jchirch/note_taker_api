@@ -24,6 +24,11 @@ module Api
           render json: { errors: @note.errors.full_messages }, status: :unprocessable_entity
         end
       end
+
+      def count
+        count = Note.count
+        render json: {count: count}
+      end
     
       private
     
