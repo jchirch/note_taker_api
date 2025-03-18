@@ -45,7 +45,7 @@ RSpec.describe "API::V1::Subjects", type: :request do
       get "/api/v1/subjects/count"
       expect(response).to have_http_status(:success)
       initial_response = JSON.parse(response.body)
-      # require 'pry'; binding.pry
+
       expect(initial_response).to eq({"count"=>2})
 
       FactoryBot.create(:subject, name: "PERL")

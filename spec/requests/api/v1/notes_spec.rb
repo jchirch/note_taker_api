@@ -48,4 +48,19 @@ RSpec.describe "API::V1::Notes", type: :request do
       expect(new_note[:content]).to eq("https://docs.oracle.com/en/java/")
     end
   end
+
+  describe "GET /count" do
+    it "counts all notes in database" do
+      get "/api/v1/notes/count"
+      expect(response).to have_http_status(:success)
+      initial_response = JSON.parse(response.body)
+      expect(initial_response).to eq({"count"=>2})
+
+      FactoryBot.create(:note, title: "When would I use PERL?", content: "if (year <= 1999)")
+
+      get "/api/v1/notes/count"
+      updated_response = JSON.parse(response.body)
+      expect(updated_response).to eq({"count"=>3})
+    end
+  end
 end
