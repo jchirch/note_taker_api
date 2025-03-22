@@ -33,6 +33,12 @@ Body:
 
 Response: Returns the created note with an ID.
 
+**Delete A Note**
+
+Endpoint: DESTROY /api/v1/notes/:id
+
+Response: Returns a message/error based on success of delete action.
+
 **Get All Subjects**  
 
 **Endpoint:** `GET /api/v1/subjects`  
