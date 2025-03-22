@@ -49,6 +49,26 @@ RSpec.describe "API::V1::Notes", type: :request do
     end
   end
 
+  describe "DELETE /destroy" do
+    it "deletes a note" do
+      expect {
+        delete "/api/v1/notes/#{@note1.id}"
+      }.to change(Note, :count).by(-1)
+      
+      expect(response).to have_http_status(:ok)
+      json = JSON.parse(response.body)
+      expect(json["message"]).to eq("Note has been deleted")
+    end
+
+    it "returns an error if note is not found" do
+      delete "/api/v1/notes/999999"
+
+      expect(response).to have_http_status(:not_found)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq("Note not found")
+    end
+  end
+
   describe "GET /count" do
     it "counts all notes in database" do
       get "/api/v1/notes/count"
