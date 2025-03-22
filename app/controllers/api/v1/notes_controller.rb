@@ -25,6 +25,22 @@ module Api
         end
       end
 
+      def destroy
+        @note = Note.find_by(id: params[:id])
+
+        if @note.nil?
+          return render json: { errors: "Note not found" }, status: :not_found
+        end
+
+        @note.subjects.clear
+
+        if @note.destroy
+          render json: {message: 'Note has been deleted' }, status: :ok
+        else
+          render json: { errors: 'Failure to delete note' }, status: :unprocessable_entity
+        end
+      end
+
       def count
         count = Note.count
         render json: {count: count}
