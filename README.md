@@ -1,10 +1,13 @@
 # Note Taker API
 
 ## Description
-This is the API for a notetaker app to allow me to learn new technologies and document as I go. It is a boilerplate API used to create and update note cards for various subjects.
+This is the API for a notetaker app to allow me to learn new technologies and document as I go. It is a boilerplate API used to create and update note cards for various subjects. The FE end of the NoteTaker app can be found [here](https://github.com/jchirch/noteTaker).
 
 ## Initialization
-Clone into local directory, open in code editor, run `bundle install` & `rails s`
+1. Clone into local directory: Run `git clone git@github.com:jchirch/note_taker_api.git`
+2. Open in code editor
+3. Install dependencies: Run `bundle install` 
+4. Open Rails Server: Run `rails s`
 
 ## Requests
 **Get All Notes**
