@@ -56,4 +56,34 @@ RSpec.describe "API::V1::Subjects", type: :request do
       expect(updated_response).to eq({"count"=>3})
     end
   end
+
+  describe "Sad Paths" do
+    it "SHOW- returns 404 if subject is not found" do
+      get "/api/v1/subjects/999999"
+        
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "returns an error if name param is missing" do
+      subject_params = { name: "" }
+      
+      post "/api/v1/subjects", params: subject_params, as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Name can't be blank")
+    end
+
+    it "returns an error if name is not unique" do
+      subject_params = { name: "Ruby on Rails" }
+      duplicate_subject_params = { name: "Ruby on Rails" }
+      
+      post "/api/v1/subjects", params: subject_params, as: :json
+      post "/api/v1/subjects", params: duplicate_subject_params, as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Name has already been taken")
+    end
+  end
 end
