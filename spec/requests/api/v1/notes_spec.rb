@@ -59,14 +59,6 @@ RSpec.describe "API::V1::Notes", type: :request do
       json = JSON.parse(response.body)
       expect(json["message"]).to eq("Note has been deleted")
     end
-
-    it "returns an error if note is not found" do
-      delete "/api/v1/notes/999999"
-
-      expect(response).to have_http_status(:not_found)
-      json = JSON.parse(response.body)
-      expect(json["errors"]).to eq("Note not found")
-    end
   end
 
   describe "GET /count" do
@@ -81,6 +73,42 @@ RSpec.describe "API::V1::Notes", type: :request do
       get "/api/v1/notes/count"
       updated_response = JSON.parse(response.body)
       expect(updated_response).to eq({"count"=>3})
+    end
+  end
+
+  describe "Sad Paths" do
+    it "DELETE- returns an error if note is not found" do
+      delete "/api/v1/notes/999999"
+
+      expect(response).to have_http_status(:not_found)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to eq("Note not found")
+    end
+
+    it "SHOW- returns a 404 if note is not found" do
+      get "/api/v1/notes/999999"
+      
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "POST- returns an error if title is missing" do
+      note_params = { content: "Missing title" }
+      
+      post "/api/v1/notes", params: note_params, as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Title can't be blank")
+    end
+
+    it "POST- returns an error if content is missing" do
+      note_params = { title: "Missing content" }
+      
+      post "/api/v1/notes", params: note_params, as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      json = JSON.parse(response.body)
+      expect(json["errors"]).to include("Content can't be blank")
     end
   end
 end
